@@ -1,6 +1,17 @@
 class GramsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
+  def index
+    @grams = Gram.all
+  end
+   def new
+    @gram = Gram.new
+  end
+   def show
+    @gram = Gram.find_by_id(params[:id])
+    return render_not_found if @gram.blank?
+  end
+
   def destroy
     @gram = Gram.find_by_id(params[:id])
     return render_not_found if @gram.blank?
@@ -22,21 +33,15 @@ class GramsController < ApplicationController
     else
       return render :edit, status: :unprocessable_entity
     end
+  end
   
 
-  def new
-    @gram = Gram.new
-  end
+  
 
-  def index
-    @grams = Gram.all
-  end
+  
 
 
-  def show
-    @gram = Gram.find_by_id(params[:id])
-    return render_not_found if @gram.blank?
-  end
+  
 
   def edit
      @gram = Gram.find_by_id(params[:id])
@@ -58,8 +63,6 @@ class GramsController < ApplicationController
   def gram_params
     params.require(:gram).permit(:message, :picture)
   end
- def render_not_found(status=:not_found)
-    render plain: "#{status.to_s.titleize} :(", status: status
-  end
-end
+
+
 end
